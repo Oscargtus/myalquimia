@@ -522,7 +522,7 @@ document.getElementById('form-lote').addEventListener('input', actualizarPreview
 // ── LOGO ──
 function intentarCargarLogo() {
   const img = document.getElementById('header-logo');
-  const posibles = ['myalquimia.png', 'Myalquimia.png', 'MyAlquimia.png', 'logo.png'];
+  const posibles = ['images/myalquimia.png', 'images/Myalquimia.png', 'images/MyAlquimia.png', 'images/logo.png'];
   let idx = 0;
   function intentar() {
     if (idx >= posibles.length) { img.style.display = 'none'; return; }
