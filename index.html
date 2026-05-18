@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+  <!-- 
+  Project: MyAlquimia — Gestión de Fórmulas Cosméticas
+  Author: Oscar Rodríguez
+  Date: 2026-05-18
+  Description: A simple landing page to handle the management of cosmetic formulas, 
+  ingredients, costs, and backups. Built with HTML, CSS, and JavaScript for local use 
+  on iOS devices with iCloud backup support.
+-->   
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyAlquimia — Gestión de Fórmulas</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img id="header-logo" src="" alt="MyAlquimia" onerror="this.style.display='none'">
+      <div>
+        <div class="logo-title">MyAlquimia</div>
+        <span class="logo-subtitle">Gestión de Fórmulas</span>
+      </div>
+    </div>
+    <nav>
+      <button class="active" onclick="showPage('dashboard')">Inicio</button>
+      <button onclick="showPage('ingredientes')">Ingredientes</button>
+      <button onclick="showPage('formulas')">Fórmulas</button>
+      <button onclick="showPage('respaldo')">Respaldo</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page active">
+    <div id="backup-banner" class="backup-banner" style="display:none;">
+      <span>⚠️ Han pasado más de 24 horas desde tu último respaldo. Recuerda exportar tus datos.</span>
+      <button class="btn btn-brown btn-sm" onclick="exportarJSON()">Guardar respaldo ahora</button>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-subtitle">Resumen general de tus fórmulas y costos</div>
+      </div>
+    </div>
+
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Ingredientes</div>
+        <div class="stat-value" id="stat-ing">0</div>
+        <div class="stat-sub">en catálogo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Fórmulas</div>
+        <div class="stat-value" id="stat-form">0</div>
+        <div class="stat-sub">productos activos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Último respaldo</div>
+        <div class="stat-value" id="stat-backup" style="font-size:1.1rem; margin-top:0.4rem;">—</div>
+        <div class="stat-sub">exportación JSON</div>
+      </div>
+    </div>
+
+    <div class="page-header" style="margin-top:1rem;">
+      <div>
+        <div class="page-title" style="font-size:1.4rem;">Resumen de costos por producto</div>
+      </div>
+      <button class="btn btn-outline" onclick="window.print()">🖨 Imprimir resumen</button>
+    </div>
+
+    <div id="dashboard-list">
+      <div class="empty-state">
+        <div class="empty-icon">⚗️</div>
+        <h3>Sin fórmulas aún</h3>
+        <p>Agrega ingredientes y crea tu primera fórmula para ver el resumen.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- INGREDIENTES -->
+  <div id="page-ingredientes" class="page">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Ingredientes</div>
+        <div class="page-subtitle">Catálogo de materiales con precios</div>
+      </div>
+      <div class="btn-actions">
+        <button class="btn btn-outline" onclick="exportarIngredientesCSV()">↓ CSV</button>
+        <button class="btn btn-primary" onclick="abrirModalIngrediente()">+ Agregar</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ingrediente</th>
+            <th>Unidad</th>
+            <th>Precio / unidad</th>
+            <th>Proveedor</th>
+            <th>Notas</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="tabla-ingredientes">
+          <tr><td colspan="6">
+            <div class="empty-state">
+              <div class="empty-icon">⚗️</div>
+              <h3>Sin ingredientes</h3>
+              <p>Agrega tu primer ingrediente.</p>
+            </div>
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FÓRMULAS -->
+  <div id="page-formulas" class="page">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Fórmulas</div>
+        <div class="page-subtitle">Recetas por producto con cálculo de costos</div>
+      </div>
+      <div class="btn-actions">
+        <button class="btn btn-outline" onclick="exportarFormulasCSV()">↓ CSV</button>
+        <button class="btn btn-primary" onclick="abrirModalFormula()">+ Nueva fórmula</button>
+      </div>
+    </div>
+    <div id="lista-formulas">
+      <div class="empty-state">
+        <div class="empty-icon">⚗️</div>
+        <h3>Sin fórmulas aún</h3>
+        <p>Crea tu primera fórmula cosmética.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESPALDO -->
+  <div id="page-respaldo" class="page">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Respaldo & Exportación</div>
+        <div class="page-subtitle">Guarda tus datos en iCloud o importa un respaldo anterior</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">💾 Exportar datos</div>
+            <div class="card-meta">Guarda en tu carpeta Documents → iCloud</div>
+          </div>
+        </div>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+          Exporta todos tus datos en formato JSON. Guárdalos en <strong>Documents/MyAlquimia/</strong>
+          para que iCloud los respalde automáticamente.
+        </p>
+        <div class="btn-actions">
+          <button class="btn btn-primary" onclick="exportarJSON()">↓ Exportar JSON completo</button>
+          <button class="btn btn-outline" onclick="exportarIngredientesCSV()">↓ CSV Ingredientes</button>
+          <button class="btn btn-outline" onclick="exportarFormulasCSV()">↓ CSV Fórmulas</button>
+        </div>
+        <div id="export-msg" style="margin-top:0.75rem;"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">📂 Importar respaldo</div>
+            <div class="card-meta">Restaura desde un archivo JSON exportado</div>
+          </div>
+        </div>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+          Selecciona un archivo <code>.json</code> exportado previamente para restaurar todos tus datos.
+          <strong>Esto reemplazará los datos actuales.</strong>
+        </p>
+        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importarJSON(event)">
+        <button class="btn btn-brown" onclick="document.getElementById('import-file').click()">↑ Seleccionar archivo JSON</button>
+        <div id="import-msg" style="margin-top:0.75rem;"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <div class="card-title" style="margin-bottom:0.75rem;">📋 Instrucciones de respaldo con iCloud</div>
+      <ol style="font-size:0.88rem; color:var(--text-muted); line-height:2; padding-left:1.25rem;">
+        <li>Haz clic en <strong>Exportar JSON completo</strong></li>
+        <li>Cuando el navegador descargue el archivo, muévelo a <strong>Documentos → MyAlquimia</strong></li>
+        <li>iCloud sincroniza esa carpeta automáticamente a la nube ☁️</li>
+        <li>Para restaurar: usa <strong>Importar respaldo</strong> y selecciona el .json</li>
+        <li>Recomendamos hacer esto al menos <strong>una vez por semana</strong></li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL INGREDIENTE -->
+<div id="modal-ingrediente" class="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="cerrarModal('modal-ingrediente')">✕</button>
+    <div class="modal-title" id="modal-ing-title">Nuevo Ingrediente</div>
+    <input type="hidden" id="ing-edit-id">
+
+    <div class="form-row">
+      <div class="form-group" style="grid-column: 1 / -1;">
+        <label>Nombre del ingrediente *</label>
+        <input type="text" id="ing-nombre" placeholder="Ej: Cafe, Cacao, Aceite de coco, etc.">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Unidad de medida *</label>
+        <select id="ing-unidad">
+          <option value="g">Gramos (g)</option>
+          <option value="kg">Kilogramos (kg)</option>
+          <option value="ml">Mililitros (ml)</option>
+          <option value="L">Litros (L)</option>
+          <option value="oz">Onzas (oz)</option>
+          <option value="lb">Libras (lb)</option>
+          <option value="unidad">Unidad</option>
+          <option value="gotas">Gotas</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Precio por unidad *</label>
+        <input type="number" id="ing-precio" placeholder="0.00" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Moneda</label>
+        <select id="ing-moneda">
+          <option value="$">$ USD</option>
+          <option value="€">€ EUR</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Proveedor</label>
+        <input type="text" id="ing-proveedor" placeholder="Ej: Valencia Natural Supply">
+      </div>
+      <div class="form-group">
+        <label>Notas</label>
+        <input type="text" id="ing-notas" placeholder="Calidad, origen, etc.">
+      </div>
+    </div>
+    <div id="ing-error" class="alert alert-error" style="display:none;"></div>
+    <div class="btn-actions mt-2">
+      <button class="btn btn-primary" onclick="guardarIngrediente()">Guardar ingrediente</button>
+      <button class="btn btn-outline" onclick="cerrarModal('modal-ingrediente')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FÓRMULA -->
+<div id="modal-formula" class="modal-overlay">
+  <div class="modal" style="max-width:760px;">
+    <button class="modal-close" onclick="cerrarModal('modal-formula')">✕</button>
+    <div class="modal-title" id="modal-form-title">Nueva Fórmula</div>
+    <input type="hidden" id="form-edit-id">
+
+    <div class="form-row">
+      <div class="form-group" style="grid-column:1/-1;">
+        <label>Nombre del producto *</label>
+        <input type="text" id="form-nombre" placeholder="Ej: Shampoo Verde">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Peso por unidad (g) *</label>
+        <input type="number" id="form-peso" value="10" min="0.1" step="0.1" placeholder="Ej: 10">
+      </div>
+      <div class="form-group">
+        <label>Unidades a producir *</label>
+        <input type="number" id="form-lote" value="50" min="1" placeholder="Ej: 50">
+      </div>
+      <div class="form-group">
+        <label>Categoría</label>
+        <input type="text" id="form-categoria" placeholder="Ej: Cremas, Lip balm, Shampoo">
+      </div>
+      <div class="form-group">
+        <label>Notas / descripción</label>
+        <input type="text" id="form-notas" placeholder="Observaciones opcionales">
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="form-section-title">Ingredientes de la fórmula</div>
+
+    <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:0.5rem; margin-bottom:0.35rem; padding:0 0.75rem;">
+      <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em;">Ingrediente</span>
+      <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em;">Cantidad</span>
+      <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em;">Unidad</span>
+      <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; text-align:right;">Costo</span>
+      <span></span>
+    </div>
+
+    <div id="formula-ingredientes-list"></div>
+
+    <button class="btn btn-outline btn-sm mt-1" onclick="agregarIngredienteFormula()">+ Agregar ingrediente</button>
+
+    <div id="formula-cost-preview" class="cost-summary" style="display:none; margin-top:1rem;">
+      <div class="cost-item">
+        <div class="cost-label">Costo / 100g</div>
+        <div class="cost-val" id="preview-total">$0.00</div>
+      </div>
+      <div class="cost-item">
+        <div class="cost-label">Peso unidad</div>
+        <div class="cost-val" id="preview-peso">10g</div>
+      </div>
+      <div class="cost-item">
+        <div class="cost-label">Costo unitario</div>
+        <div class="cost-val" id="preview-unit-cost">$0.00</div>
+      </div>
+      <div class="cost-item">
+        <div class="cost-label">Costo lote</div>
+        <div class="cost-val" id="preview-lote-total">$0.00</div>
+      </div>
+      <div class="cost-item">
+        <div class="cost-label">Unidades</div>
+        <div class="cost-val" id="preview-units">50</div>
+      </div>
+    </div>
+
+    <div id="form-error" class="alert alert-error" style="display:none;"></div>
+    <div class="btn-actions mt-2">
+      <button class="btn btn-primary" onclick="guardarFormula()">Guardar fórmula</button>
+      <button class="btn btn-outline" onclick="cerrarModal('modal-formula')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
