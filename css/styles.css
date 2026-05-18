@@ -69,7 +69,7 @@ header {
 }
 
 .logo-title {
-  font-family: 'Inter', serif;
+  font-family: 'Lora', serif;
   font-size: 1.5rem;
   font-weight: 600;
   color: #fff;
@@ -104,7 +104,7 @@ nav button {
   text-transform: uppercase;
   padding: 0.4rem 0.85rem;
   border-radius: 6px;
-  cursor: pointer;
+  cursor: poLora;
   transition: all 0.2s;
 }
 
@@ -132,7 +132,7 @@ main {
 }
 
 .page-title {
-  font-family: 'Inter', serif;
+  font-family: 'Lora', serif;
   font-size: 2rem;
   font-weight: 600;
   color: var(--green-deep);
@@ -157,7 +157,7 @@ main {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
-  cursor: pointer;
+  cursor: poLora;
   border: 1.5px solid transparent;
   transition: all 0.2s;
   text-decoration: none;
@@ -221,7 +221,7 @@ main {
 }
 
 .card-title {
-  font-family: 'Inter', serif;
+  font-family: 'Lora', serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--green-deep);
@@ -282,7 +282,7 @@ main {
 }
 
 .stat-value {
-  font-family: 'Inter', serif;
+  font-family: 'Lora', serif;
   font-size: 2rem;
   font-weight: 600;
   color: var(--green-deep);
@@ -306,7 +306,7 @@ main {
 }
 
 .form-section-title {
-  font-family: 'Inter', serif;
+  font-family: 'Lora', serif;
   font-size: 1.15rem;
   font-weight: 600;
   color: var(--green-deep);
@@ -396,7 +396,7 @@ tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover { background: rgba(200,222,200,0.18); }
 
 .td-name { font-weight: 500; color: var(--green-deep); }
-.td-cost { font-family: 'Inter', serif; font-size: 1rem; font-weight: 600; }
+.td-cost { font-family: 'Lora', serif; font-size: 1rem; font-weight: 600; }
 .td-actions { display: flex; gap: 0.35rem; }
 
 /* ── INGREDIENT ROW in formula ── */
@@ -423,7 +423,7 @@ tbody tr:hover { background: rgba(200,222,200,0.18); }
   background: none;
   border: none;
   color: var(--danger);
-  cursor: pointer;
+  cursor: poLora;
   font-size: 1.1rem;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
@@ -447,7 +447,7 @@ tbody tr:hover { background: rgba(200,222,200,0.18); }
 .cost-item { text-align: center; }
 .cost-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.75; }
 .cost-val {
-  font-family: 'Inter', serif;
+  font-family: 'Lora', serif;
   font-size: 1.8rem;
   font-weight: 600;
   line-height: 1.1;
@@ -479,7 +479,7 @@ tbody tr:hover { background: rgba(200,222,200,0.18); }
 }
 
 .modal-title {
-  font-family: 'Inter', serif;
+  font-family: 'Lora', serif;
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--green-deep);
@@ -494,7 +494,7 @@ tbody tr:hover { background: rgba(200,222,200,0.18); }
   background: none;
   border: none;
   font-size: 1.4rem;
-  cursor: pointer;
+  cursor: poLora;
   color: var(--text-muted);
   line-height: 1;
   padding: 0.2rem;
@@ -532,7 +532,7 @@ tbody tr:hover { background: rgba(200,222,200,0.18); }
 }
 
 .empty-state h3 {
-  font-family: 'Inter', serif;
+  font-family: 'Lora', serif;
   font-size: 1.3rem;
   color: var(--green-deep);
   margin-bottom: 0.3rem;
