@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Project Information -->
+    <meta name="application-name" content="MyAlquimia">
+    <meta name="description" content="Gestion de Formulas">
+    <meta name="keywords" content="formulas, recetas, natural"> 
+    <!-- Author Information -->
+    <meta name="author" content="Oscar A. Rodriguez">
+    <meta name="designer" content="Oscar A. Rodriguez">
+    <title>MyAlquimia — Gestión de Fórmulas</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=Jost:ital,wght@0,300;1,300&family=Lora:wght@400;500;700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Intro coding, svg and references -->
+    <div class="intro">
+        <div class="intro-content">
+            <h1 class="logo-header">
+                <span class="logo">Make&nbsp;</span>
+                <span class="logo">your&nbsp;</span>
+                <span class="logo">magic!</span>
+            </h1>
+            <h2 class="subheadline">the  lab  is  yours</h2>
+        </div>
+
+        <div class="botanical-art">
+            <img src="images/olives.svg" alt="Rama de Olivo">
+        </div>
+    </div>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo-wrap">
+                <img id="header-logo" src="images/logo.png" alt="MyAlquimia" onerror="this.style.display='none'">
+                <div>
+                    <div class="logo-title">MyAlquimia</div>
+                    <span class="logo-subtitle">Gestión de Fórmulas</span>
+                </div>
+            </div>
+            <nav>
+                <button class="active" id="nav-dashboard" onclick="showPage('dashboard')">Inicio</button>
+                <button id="nav-ingredientes" onclick="showPage('ingredientes')">Ingredientes</button>
+                <button id="nav-formulas" onclick="showPage('formulas')">Fórmulas</button>
+                <button id="nav-respaldo" onclick="showPage('respaldo')">Respaldo</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- General references, statistics and status of the Dashboard -->
+    <main>
+        <div id="page-dashboard" class="page active">
+            <div id="backup-banner" class="backup-banner" style="display:none;">
+                <span>⚠️ Han pasado más de 24 horas desde tu último respaldo. Recuerda exportar tus datos.</span>
+                <button class="btn btn-brown btn-sm" onclick="exportarJSON()">Guardar respaldo ahora</button>
+            </div>
+
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Dashboard</div>
+                    <div class="page-subtitle">Resumen general de tus fórmulas y costos base</div>
+                </div>
+            </div>
+
+            <div class="stats-row" id="stats-row">
+                <div class="stat-card">
+                    <div class="stat-label">Ingredientes</div>
+                    <div class="stat-value" id="stat-ing">0</div>
+                    <div class="stat-sub">en catálogo</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Fórmulas registradas</div>
+                    <div class="stat-value" id="stat-form">0</div>
+                    <div class="stat-sub">recetas base 100g</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Último respaldo</div>
+                    <div class="stat-value" id="stat-backup" style="font-size:1.1rem; margin-top:0.4rem;">—</div>
+                    <div class="stat-sub">exportación JSON</div>
+                </div>
+            </div>
+
+            <div class="page-header" style="margin-top:1rem;">
+                <div>
+                    <div class="page-title" style="font-size:1.4rem;">Costo de Referencia por cada 100g de Fórmula</div>
+                </div>
+            </div>
+
+            <div id="dashboard-list">
+                <div class="empty-state">
+                    <div class="empty-icon">⚗️</div>
+                    <h3>Sin fórmulas aún</h3>
+                    <p>Agrega ingredientes y crea tu primera receta para ver el resumen de costos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-ingredientes" class="page">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Ingredientes</div>
+                    <div class="page-subtitle">Catálogo de materias primas y cálculo automatizado por gramo/ml</div>
+                </div>
+                <div class="btn-actions">
+                    <button class="btn btn-outline" onclick="exportarIngredientesCSV()">↓ CSV</button>
+                    <button class="btn btn-primary" onclick="abrirModalIngrediente()">+ Agregar Ingrediente</button>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ingrediente</th>
+                            <th>Formato Compra</th>
+                            <th>Precio Envase</th>
+                            <th>Proveedor</th>
+                            <th>Notas</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-ingredientes">
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon">⚗️</div>
+                                    <h3>Sin ingredientes</h3>
+                                    <p>Agrega tu primer material para habilitar la creación de fórmulas.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="page-formulas" class="page">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Fórmulas (Maestras)</div>
+                    <div class="page-subtitle">Tus recetas estandarizadas basadas estrictamente en 100 gramos</div>
+                </div>
+                <div class="btn-actions">
+                    <button class="btn btn-brown" onclick="abrirModalProduccion()">🧪 Escalar / Calcular Lote</button>
+                    <button class="btn btn-primary" onclick="abrirModalFormula()">+ Nueva Fórmula</button>
+                </div>
+            </div>
+            <div id="lista-formulas">
+                <div class="empty-state">
+                    <div class="empty-icon">⚗️</div>
+                    <h3>Sin fórmulas aún</h3>
+                    <p>Crea una fórmula base para empezar a simular lotes de producción.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-respaldo" class="page">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Respaldo & Exportación</div>
+                    <div class="page-subtitle">Guarda tus datos en iCloud o importa un respaldo anterior</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">💾 Exportar datos</div>
+                            <div class="card-meta">Guarda en tu carpeta Documents → iCloud</div>
+                        </div>
+                    </div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+                        Exporta todos tus datos en formato JSON. Guárdalos en tu directorio iCloud para mantener un histórico seguro.
+                    </p>
+                    <div class="btn-actions">
+                        <button class="btn btn-primary" onclick="exportarJSON()">↓ Exportar JSON completo</button>
+                        <button class="btn btn-outline" onclick="exportarIngredientesCSV()">↓ CSV Ingredientes</button>
+                        <button class="btn btn-outline" onclick="exportarFormulasCSV()">↓ CSV Fórmulas</button>
+                    </div>
+                    <div id="export-msg" style="margin-top:0.75rem;"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">📂 Importar respaldo</div>
+                            <div class="card-meta">Restaura desde un archivo JSON exportado</div>
+                        </div>
+                    </div>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+                        Selecciona un archivo <code>.json</code> para restaurar tus datos. Recuerda que esto reemplazará la información local del navegador.
+                    </p>
+                    <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importarJSON(event)">
+                    <button class="btn btn-brown" onclick="document.getElementById('import-file').click()">↑ Seleccionar archivo JSON</button>
+                    <div id="import-msg" style="margin-top:0.75rem;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-ingrediente" class="modal-overlay">
+        <div class="modal">
+            <button class="modal-close" onclick="cerrarModal('modal-ingrediente')">✕</button>
+            <div class="modal-title" id="modal-ing-title">Nuevo Ingrediente</div>
+            <input type="hidden" id="ing-edit-id">
+
+            <div class="form-row">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Nombre del ingrediente *</label>
+                    <input type="text" id="ing-nombre" placeholder="Ej: Manteca de cacao, Aceite de coco...">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Unidad de medida *</label>
+                    <select id="ing-unidad">
+                        <option value="g">Gramos (g)</option>
+                        <option value="ml">Mililitros (ml)</option>
+                        <option value="unidad">Unidad</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Cantidad que compra (Envase) *</label>
+                    <input type="number" id="ing-cantidad-compra" value="1" min="0.001" step="any" placeholder="Ej: 80">
+                </div>
+                <div class="form-group">
+                    <label>Precio total del envase *</label>
+                    <input type="number" id="ing-precio" placeholder="0.00" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Moneda</label>
+                    <select id="ing-moneda">
+                        <option value="€">€ EUR</option>
+                        <option value="$">$ USD</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Proveedor</label>
+                    <input type="text" id="ing-proveedor" placeholder="Ej: Proveedor Cosmética">
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <input type="text" id="ing-notas" placeholder="Pureza, lote de compra, etc.">
+                </div>
+            </div>
+            <div id="ing-error" class="alert alert-error" style="display:none;"></div>
+            <div class="btn-actions mt-2">
+                <button class="btn btn-primary" onclick="guardarIngrediente()">Guardar Ingrediente</button>
+                <button class="btn btn-outline" onclick="cerrarModal('modal-ingrediente')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-formula" class="modal-overlay">
+        <div class="modal" style="max-width:760px;">
+            <button class="modal-close" onclick="cerrarModal('modal-formula')">✕</button>
+            <div class="modal-title" id="modal-form-title">Nueva Fórmula Base</div>
+            <input type="hidden" id="form-edit-id">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre del producto *</label>
+                    <input type="text" id="form-nombre" placeholder="Ej: Bálsamo Labial de Cacao">
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <input type="text" id="form-categoria" placeholder="Ej: Labiales, Cremas...">
+                </div>
+                <div class="form-group">
+                    <label>Notas / Descripción</label>
+                    <input type="text" id="form-notas" placeholder="Ej: Textura suave, aroma natural...">
+                </div>
+            </div>
+
+            <hr class="divider">
+            <div class="form-section-title">Composición de la fórmula maestra (Cantidades exactas para producir 100g)</div>
+
+            <div style="display:grid; grid-template-columns:2fr 1.2fr 1fr 1fr auto; gap:0.5rem; margin-bottom:0.35rem; padding:0 0.75rem; align-items: end;">
+                <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:500;">Ingrediente</span>
+                <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:500;">Cant. en 100g de producto</span>
+                <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:500; text-align: center; display: block; width: 100%;">Unidad</span>
+                <span style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; font-weight:500; text-align:right;">Costo (100g)</span>
+                <span></span>
+            </div>
+
+            <div id="formula-ingredientes-list"></div>
+
+            <button class="btn btn-outline btn-sm mt-1" onclick="agregarIngredienteFormula()">+ Vincular Ingrediente</button>
+
+            <div id="formula-cost-preview" class="cost-summary" style="display:none; margin-top:1rem;">
+                <div class="cost-item">
+                    <div class="cost-label">Costo estimado de la fórmula maestra (por cada 100g)</div>
+                    <div class="cost-val" id="preview-total">€0.00</div>
+                </div>
+            </div>
+
+            <div id="form-error" class="alert alert-error" style="display:none;"></div>
+            <div class="btn-actions mt-2">
+                <button class="btn btn-primary" onclick="guardarFormula()">Guardar Fórmula Maestra</button>
+                <button class="btn btn-outline" onclick="cerrarModal('modal-formula')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-produccion" class="modal-overlay">
+        <div class="modal" style="max-width:760px;">
+            <button class="modal-close" onclick="cerrarModal('modal-produccion')">✕</button>
+            <div class="modal-title">🧪 Planificar y Escalar Lote de Producción</div>
+            
+            <div class="form-row">
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>¿Qué producto vas a formular? *</label>
+                    <select id="prod-formula-id" onchange="calcularEscalaProduccion()"></select>
+                </div>
+                <div class="form-group">
+                    <label>Peso/Contenido individual (gr o ml) *</label>
+                    <input type="number" id="prod-peso-unidad" value="7" min="0.01" step="any" oninput="calcularEscalaProduccion()">
+                </div>
+                <div class="form-group">
+                    <label>Unidades a producir *</label>
+                    <input type="number" id="prod-unidades" value="50" min="1" oninput="calcularEscalaProduccion()">
+                </div>
+            </div>
+
+            <hr class="divider">
+            <div class="form-section-title" id="prod-titulo-lote">Hoja de Pesaje del Lote Real</div>
+
+            <div class="table-wrap" style="margin-top:0.5rem; max-height: 250px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ingrediente Requerido</th>
+                            <th>Proporción Base (100g)</th>
+                            <th>CANTIDAD A PESAR</th>
+                            <th style="text-align:right">Costo Proporcional</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prod-tabla-ingredientes"></tbody>
+                </table>
+            </div>
+
+            <div class="cost-summary" style="margin-top:1rem;">
+                <div class="cost-item">
+                    <div class="cost-label">Masa Total del Lote</div>
+                    <div class="cost-val" id="prod-total-peso-lote">0.00g</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Costo Total del Lote</div>
+                    <div class="cost-val" id="prod-costo-total-lote">€0.00</div>
+                </div>
+                <div class="cost-item">
+                    <div class="cost-label">Costo Individual por Unidad</div>
+                    <div class="cost-val" id="prod-costo-unitario">€0.00</div>
+                </div>
+            </div>
+
+            <div class="btn-actions mt-2">
+                <button class="btn btn-primary" onclick="imprimirLoteActual()">🖨 Imprimir Hoja de Laboratorio</button>
+                <button class="btn btn-outline" onclick="cerrarModal('modal-produccion')">Cerrar Ventana</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
